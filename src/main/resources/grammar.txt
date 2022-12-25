@@ -1,31 +1,32 @@
-<Program> -> <Logical_expr> || <Arithmetic_expr> || <Variable_declaration> || <Signature>
+<Program> ->  <Expr> || <Variable>
 
-<Logical_expr> -> <Logical_variable> <R_logical_expr>
-<Logical_variable> -> <Is_negative> <R_logical_variable>
-<Is_negative> -> ! <D> || <D>
-<D> -> ( <Logical_expr> ) || false || true
-<R_logical_variable> -> && <Is_negative> <R_logical_variable> || epsilon
-<R_logical_expr> -> || <Logical_variable> <R_logical_expr> || epsilon
+<Expr> -> <A> <E2>
+<E2> -> <L_operations> <A> <E2> || epsilon
+<L_operations> -> || || &&
 
-<Arithmetic_expr> -> <Term> <R_arithmetic_expr>
-<R_arithmetic_expr> -> + <Arithmetic_expr> || - <Arithmetic_expr> || epsilon
-<Term> -> <Factor> <R_term>
-<R_term> -> * <Term> || / <Term> || epsilon
-<Factor> -> Number || ( <Arithmetic_expr> ) || - <Factor>
+<A> -> <T> <A2>
+<A2> -> <A_operations_one> <T> <A2> || epsilon
+<A_operations_one> -> + || -
 
-<Variable_declaration> -> <Type> <Identifier> <Value> ;
-<Value> -> <Identifier> || <Integer_const> || <Boolean_const>
+<T> -> <F> <T2>
+<T2> -> <A_operations_two> <F> <T2> || epsilon
+<A_operations_two> -> * || /
 
-<Identifier> -> String || epsilon
+<F> -> ( <Expr> ) || <Value>
+
+<Variable> -> void String <R_variable>
+<Variable> -> <Type> String <R_variable>
+<R_variable> -> = <Value> ;
+<Value> -> String || <Integer_const> || <Boolean_const>
 
 <Integer_const> -> <Minus> Number
 <Minus> -> - || epsilon
 
 <Boolean_const> -> true || false
 
-<Type> -> void || int || boolean || double
+<Type> -> int || boolean || double
 
-<Signature> -> <Type> <Identifier> ( <Signature_end>
+<R_variable> -> ( <Signature_end>
 <Signature_end> -> ) ; || <Param> <Param_list> ) ;
-<Param> -> <Type> <Identifier> || ...
+<Param> -> <Type> String || ...
 <Param_list> -> , <Param> <Param_list> || epsilon
