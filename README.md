@@ -1,6 +1,10 @@
 # OmSTU intelligent systems lab 2
 - LL(1) analyzer
 
+Program computes FIRST and FOLLOW sets for given grammar, after that Analyzer makes parser table.
+
+And then implements an algorithm with token buffer and terminal/nonTerminal stack based on the table.
+
 ## Dependencies
 
 - java 11
@@ -40,4 +44,4 @@ Parser will parse grammar with next syntax:
 ```
 * if || appears with at least 3 lexemes it means that it have at least 2 statements
 * epsilon is the empty string
-* each terminal/nonTerminal must be separated by space
+* each terminal/nonTerminal must be separated by space or any space character
