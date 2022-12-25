@@ -4,25 +4,22 @@
 <Logical_variable> -> <Is_negative> <R_logical_variable>
 <Is_negative> -> ! <D> || <D>
 <D> -> ( <Logical_expr> ) || false || true
-<R_logical_variable> -> && <Is_negative> <R_logical_variable> || eps
-<R_logical_expr> -> || <Logical_variable> <R_logical_expr> || eps
+<R_logical_variable> -> && <Is_negative> <R_logical_variable> || epsilon
+<R_logical_expr> -> || <Logical_variable> <R_logical_expr> || epsilon
 
 <Arithmetic_expr> -> <Term> <R_arithmetic_expr>
-<R_arithmetic_expr> -> + <Arithmetic_expr> || - <Arithmetic_expr> || eps
+<R_arithmetic_expr> -> + <Arithmetic_expr> || - <Arithmetic_expr> || epsilon
 <Term> -> <Factor> <R_term>
-<R_term> -> * <Term> || / <Term> || eps
-<Factor> -> number || ( <Arithmetic_expr> ) || - <Factor>
+<R_term> -> * <Term> || / <Term> || epsilon
+<Factor> -> Number || ( <Arithmetic_expr> ) || - <Factor>
 
 <Variable_declaration> -> <Type> <Identifier> <Value> ;
 <Value> -> <Identifier> || <Integer_const> || <Boolean_const>
 
-<Identifier> -> String || eps
+<Identifier> -> String || epsilon
 
-<Integer_const> -> <Minus> <Number>
-<Minus> -> - <Non_zero_digit> || eps
-<Number> -> <Digit> <Number> || eps
-<Digit> -> <Non_zero_digit> || 0
-<Non_zero_digit> -> 1 || ... || 9
+<Integer_const> -> <Minus> Number
+<Minus> -> - || epsilon
 
 <Boolean_const> -> true || false
 
@@ -31,4 +28,4 @@
 <Signature> -> <Type> <Identifier> ( <Signature_end>
 <Signature_end> -> ) ; || <Param> <Param_list> ) ;
 <Param> -> <Type> <Identifier> || ...
-<Param_list> -> , <Param> <Param_list> || eps
+<Param_list> -> , <Param> <Param_list> || epsilon

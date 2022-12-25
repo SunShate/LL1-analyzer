@@ -5,21 +5,29 @@ import java.util.Objects;
 
 public class Rule {
     private final String nonTerminal;
-    private final List<String> production;
+    private final String[] production;
 
     public Rule(final String nonTerminal, final List<String> production) {
         this.nonTerminal = nonTerminal;
-        this.production = production;
+        this.production = production.toArray(new String[0]);
     }
 
-    public String getNonTerminal() {
+    public String getLeftSide() {
         return nonTerminal;
     }
 
-    public List<String> getProduction() {
+    public String[] getRightSide() {
         return production;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder(nonTerminal + " -> ");
+        for (String s : production) {
+            str.append(s).append(" ");
+        }
+        return str.toString();
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

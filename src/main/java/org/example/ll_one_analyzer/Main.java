@@ -1,6 +1,7 @@
 package org.example.ll_one_analyzer;
 
-import org.example.ll_one_analyzer.first.First;
+import org.example.ll_one_analyzer.analyzer.Analyzer;
+import org.example.ll_one_analyzer.grammar_parser.Grammar;
 import org.example.ll_one_analyzer.grammar_parser.GrammarParser;
 import org.example.ll_one_analyzer.grammar_parser.Rule;
 
@@ -13,23 +14,23 @@ public class Main {
     public static void main(final String[] args) throws IOException {
         GrammarParser grammarParser = new GrammarParser();
 
-        List<Rule> grammar = grammarParser.parseGrammarFromFile(Paths.get(args[0]));
+        List<Rule> rules = grammarParser.parseGrammarFromFile(Paths.get(args[0]));
 
-        Set<String> nonTerminals = grammar.stream().collect(
-                Collectors.groupingBy(Rule::getNonTerminal, Collectors.toSet())
-        ).keySet();
+        Grammar grammar = new Grammar();
+        grammar.setRules(rules);
 
-        Set<String> terminals = grammar.stream()
-                .map(Rule::getProduction)
-                .flatMap(List::stream)
-                .collect(Collectors.toSet());
+        System.out.println(grammar.getRules());
+        System.out.printf("\nterminals: %s%n", grammar.getTerminals());
+        System.out.printf("\nnonTerminals: %s%n", grammar.getNonTerminals());
 
-        terminals.removeAll(nonTerminals);
+        System.out.printf("\nfirstSets: %s%n", grammar.getFirstSets());
+        System.out.printf("\nfollowSets: %s%n", grammar.getFollowSets());
 
-        System.out.println(grammar);
-        System.out.printf("\nterminals: %s%n", terminals);
-        System.out.printf("\nnonTerminals: %s%n", nonTerminals);
+        Analyzer analyzer = new Analyzer();
 
+        analyzer.buildParserTable(grammar).forEach((pair, rule) -> {
+            System.out.println(String.format("%s, %s -> %s", pair.getFirst(), pair.getSecond(), rule));
+        });
 
 //        Scanner scanner = new Scanner(System.in);
 //        BaseAnalyzer<List<String>> analyzer = new Analyzer();
