@@ -1,51 +1,47 @@
 package org.example.ll_one_analyzer;
 
-import java.io.BufferedReader;
+import org.example.ll_one_analyzer.first.First;
+import org.example.ll_one_analyzer.grammar_parser.GrammarParser;
+import org.example.ll_one_analyzer.grammar_parser.Rule;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    private static final String DEFAULT_FILE_NAME = "input.txt";
+    public static void main(final String[] args) throws IOException {
+        GrammarParser grammarParser = new GrammarParser();
 
-    public static void main(final String[] args) {
-        ClassLoader classLoader = Main.class.getClassLoader();
+        List<Rule> grammar = grammarParser.parseGrammarFromFile(Paths.get(args[0]));
 
-        if (args.length > 0) {
-            try (InputStream is = classLoader.getResourceAsStream(DEFAULT_FILE_NAME)) {
-                if (null == is) {
-                    throw new IllegalArgumentException("FILE_NOT_FOUND " + args[0]);
-                }
-                printInputStream(is);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try (InputStream is = classLoader.getResourceAsStream(DEFAULT_FILE_NAME)) {
-                if (null == is) {
-                    throw new IllegalArgumentException("DEFAULT_FILE_NOT_FOUND " + DEFAULT_FILE_NAME);
-                }
-                printInputStream(is);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+        Set<String> nonTerminals = grammar.stream().collect(
+                Collectors.groupingBy(Rule::getNonTerminal, Collectors.toSet())
+        ).keySet();
 
-    private static void printInputStream(InputStream is) {
+        Set<String> terminals = grammar.stream()
+                .map(Rule::getProduction)
+                .flatMap(List::stream)
+                .collect(Collectors.toSet());
 
-        try (InputStreamReader streamReader =
-                     new InputStreamReader(is, StandardCharsets.UTF_8);
-             BufferedReader reader = new BufferedReader(streamReader)) {
+        terminals.removeAll(nonTerminals);
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+        System.out.println(grammar);
+        System.out.printf("\nterminals: %s%n", terminals);
+        System.out.printf("\nnonTerminals: %s%n", nonTerminals);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+//        Scanner scanner = new Scanner(System.in);
+//        BaseAnalyzer<List<String>> analyzer = new Analyzer();
+//
+//        System.out.println("Write ESCAPE to end");
+//
+//        String line;
+//        while (!Objects.equals(line = scanner.nextLine(), "ESCAPE")) {
+//            System.out.printf(
+//                    "input string belongs to grammar - %b%n",
+//                    analyzer.analyze(List.of(line.split(" ")))
+//            );
+//        }
     }
 }
