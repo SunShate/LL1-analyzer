@@ -11,12 +11,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class Analyzer implements BaseAnalyzer<List<String>> {
+
+    private Map<Pair<String, String>, Rule> parserTable;
     private static final String EPSILON = "epsilon";
     public Analyzer() {
     }
 
-    public Map<Pair<String, String>, Rule> buildParserTable(final Grammar grammar) {
-        Map<Pair<String, String>, Rule> parserTable = new HashMap<>();
+    public void buildParserTable(final Grammar grammar) {
+        this.parserTable = new HashMap<>();
 
         for (String nonTerminal : grammar.getNonTerminals()) {
             for (String terminal: grammar.getTerminals()) {
@@ -49,7 +51,9 @@ public class Analyzer implements BaseAnalyzer<List<String>> {
                         }
                     });
         }
+    }
 
+    public Map<Pair<String, String>, Rule> getParserTable() {
         return parserTable;
     }
 

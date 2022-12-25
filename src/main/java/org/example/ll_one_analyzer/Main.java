@@ -28,10 +28,10 @@ public class Main {
 
         Analyzer analyzer = new Analyzer();
 
-        analyzer.buildParserTable(grammar).forEach((pair, rule) -> {
-            System.out.println(String.format("%s, %s -> %s", pair.getFirst(), pair.getSecond(), rule));
+        analyzer.buildParserTable(grammar);
+        analyzer.getParserTable().forEach((pair, rule) -> {
+            System.out.printf("%s, %s -> %s%n", pair.getFirst(), pair.getSecond(), rule);
         });
-
 //        Scanner scanner = new Scanner(System.in);
 //        BaseAnalyzer<List<String>> analyzer = new Analyzer();
 //
