@@ -8,6 +8,7 @@ import org.example.ll_one_analyzer.grammar_parser.Rule;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(final String[] args) throws IOException {
@@ -28,9 +29,11 @@ public class Main {
         Analyzer analyzer = new Analyzer();
 
         analyzer.buildParserTable(grammar);
-        analyzer.getParserTable().forEach((pair, rule) ->
-                System.out.printf("%s, %s -> %s%n", pair.getFirst(), pair.getSecond(), rule)
-        );
+        analyzer.getParserTable().forEach((pair, rule) -> {
+            if (rule != null) {
+                System.out.printf("%s, %s -> %s%n", pair.getFirst(), pair.getSecond(), rule);
+            }
+        });
 
         Scanner scanner = new Scanner(System.in);
 //        BaseAnalyzer<List<String>> analyzer = new Analyzer();
