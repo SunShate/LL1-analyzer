@@ -39,14 +39,15 @@ public class Grammar {
         return rules;
     }
 
-    public int findRuleIndex(Rule rule){
-        for(int i=0 ; i<rules.size();i++){
-            if(rules.get(i).equals(rule)){
+    public int findRuleIndex(Rule rule) {
+        for (int i = 0; i < rules.size() - 1; i++) {
+            if (rules.get(i).equals(rule)) {
                 return i;
             }
         }
         return -1;
     }
+
     public Set<String> getNonTerminals() {
         return nonTerminals;
     }
@@ -59,17 +60,17 @@ public class Grammar {
         firstSets = new HashMap<>();
         for (String s : nonTerminals) {
 
-            Set<String> temp = new HashSet<>();
+            Set<String> temp = new LinkedHashSet<>();
             firstSets.put(s, temp);
         }
         while (true) {
             boolean isChanged = false;
             for (String variable : nonTerminals) {
-                HashSet<String> firstSet = new HashSet<>();
+                Set<String> firstSet = new LinkedHashSet<>();
                 for (Rule rule : rules) {
 
                     if (rule.getLeftSide().equals(variable)) {
-                        HashSet<String> addAll = computeFirst(rule.getRightSide(), 0);
+                        Set<String> addAll = computeFirst(rule.getRightSide(), 0);
                         firstSet.addAll(addAll);
                     }
                 }
@@ -90,10 +91,10 @@ public class Grammar {
     private void computeFollowSet() {
         followSets = new HashMap<>();
         for (String s : nonTerminals) {
-            HashSet<String> temp = new HashSet<>();
+            LinkedHashSet<String> temp = new LinkedHashSet<>();
             followSets.put(s, temp);
         }
-        HashSet<String> start = new HashSet<>();
+        Set<String> start = new LinkedHashSet<>();
         start.add("$");
         followSets.put(rules.get(0).getLeftSide(), start);
 
@@ -106,7 +107,7 @@ public class Grammar {
                             if (i == rule.getRightSide().length - 1) {
                                 followSets.get(nonTerminal).addAll(followSets.get(rule.getLeftSide()));
                             } else {
-                                HashSet<String> first = computeFirst(rule.getRightSide(), i + 1);
+                                Set<String> first = computeFirst(rule.getRightSide(), i + 1);
                                 if (first.contains(EPSILON)) {
                                     first.remove(EPSILON);
                                     first.addAll(followSets.get(rule.getLeftSide()));
@@ -126,8 +127,8 @@ public class Grammar {
         }
     }
 
-    public HashSet<String> computeFirst(String[] string, int index) {
-        HashSet<String> first = new HashSet<>();
+    public Set<String> computeFirst(String[] string, int index) {
+        Set<String> first = new LinkedHashSet<>();
         if (index == string.length) {
             return first;
         }
@@ -149,8 +150,8 @@ public class Grammar {
         return first;
     }
 
-    public HashSet<Rule> getRuledByLeftVariable(String variable) {
-        HashSet<Rule> variableRules = new HashSet<>();
+    public Set<Rule> getRuledByLeftVariable(String variable) {
+        Set<Rule> variableRules = new LinkedHashSet<>();
         for (Rule rule : rules) {
             if (rule.getLeftSide().equals(variable)) {
                 variableRules.add(rule);
@@ -208,7 +209,7 @@ public class Grammar {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        for(Rule rule: rules){
+        for (Rule rule : rules) {
             str.append(rule).append("\n");
         }
         return str.toString();

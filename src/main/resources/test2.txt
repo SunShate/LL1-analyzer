@@ -1,0 +1,34 @@
+Program ->  Expr | Variable .
+
+Expr -> A E2 .
+E2 -> L_operations A E2 | epsilon .
+L_operations -> V | & .
+
+A -> T A2 .
+A2 -> A_operations_one T A2 | epsilon .
+A_operations_one -> + | - .
+
+T -> F T2 .
+T2 -> A_operations_two F T2 | epsilon .
+A_operations_two -> * | / .
+
+F -> ( Expr ) | Value .
+
+Variable -> void String R_variable .
+Variable -> Type String R_variable .
+R_variable -> = Value eol .
+Value -> String | Integer_const | Boolean_const .
+
+Integer_const -> Minus Number .
+Minus -> - | epsilon .
+
+Boolean_const -> true | false .
+
+Type -> int | boolean | double .
+
+R_variable -> ( Signature_end .
+Signature_end -> ) eol | Param Param_list ) eol .
+Param -> Type String | ,,, .
+Param_list -> , Param Param_list | epsilon .
+epsilon -> .
+eol -> ; .

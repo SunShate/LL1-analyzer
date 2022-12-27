@@ -39,10 +39,10 @@ public class Analyzer implements BaseAnalyzer<
             }
         }
 
-        final Map<String, Set<String>> firstSets = grammar.getFirstSets(), followSets = grammar.getFollowSets();
+        final Map<String, Set<String>> followSets = grammar.getFollowSets();
 
         for (final Rule rule : grammar.getRules()) {
-            for (final String firstTerminal : firstSets.get(rule.getLeftSide())) {
+            for (final String firstTerminal : grammar.computeFirst(rule.getRightSide(), 0)) {
                 parserTable.put(new Pair<>(rule.getLeftSide(), firstTerminal), rule);
                 if (firstTerminal.equals(EPSILON)) {
                     for (final String followTerminal : followSets.get(rule.getLeftSide())) {
@@ -80,6 +80,12 @@ public class Analyzer implements BaseAnalyzer<
             String a = tokens.get(ip);
 
             if (X.equals(a)) {
+                grammarStack.pop();
+                ip++;
+            } else if (X.equals("String") && a.matches("[a-z_][a-z]*(?:[A-Z][a-z0-9]+)*[a-z0-9_]?")) {
+                grammarStack.pop();
+                ip++;
+            } else if (X.equals("Number") && a.matches("\\d+")) {
                 grammarStack.pop();
                 ip++;
             } else if (a.matches("[a-z_][a-z]*(?:[A-Z][a-z0-9]+)*[a-z0-9_]?") &&
