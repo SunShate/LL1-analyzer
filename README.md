@@ -5,6 +5,9 @@ Program computes FIRST and FOLLOW sets for given grammar, after that Analyzer ma
 
 And then implements an algorithm with token buffer and terminal/nonTerminal stack based on the table.
 
+
+### To test if grammar.txt is LL(1) parsable please enter content of test2 here http://mdaines.github.io/grammophone
+
 ## Dependencies
 
 - java 11
